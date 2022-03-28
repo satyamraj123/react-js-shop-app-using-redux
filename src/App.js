@@ -4,9 +4,8 @@ import Products from "./components/Shop/Products";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { uiActions } from "./store/uiSlice";
 import Notification from "./components/UI/Notification";
-import {sendCartData} from './store/cartSlice';
+import {sendCartData,fetchCartData} from './store/cartActions';
 let isinit=true;
 
 function App() {
@@ -15,6 +14,9 @@ function App() {
   const cart = useSelector((state) => state.cart);
   const notification = useSelector((state) => state.ui.notification);
   //whenever cart updates this useeffect will automatically update cart in firebase
+  useEffect(()=>{
+    dispatch(fetchCartData());
+  },[dispatch]);
   useEffect(() => {
     if(isinit===true){
       isinit=false;

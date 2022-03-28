@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { uiActions } from "./store/uiSlice";
 import Notification from "./components/UI/Notification";
-
+import {sendCartData} from './store/cartSlice';
 let isinit=true;
 
 function App() {
@@ -16,49 +16,11 @@ function App() {
   const notification = useSelector((state) => state.ui.notification);
   //whenever cart updates this useeffect will automatically update cart in firebase
   useEffect(() => {
-   
-    const sendCartData = async () => {
-      dispatch(
-        uiActions.showNotification({
-          title: "Sending....",
-          message: "Sending cart data!",
-          status: "pending",
-        })
-      );
-      const response = await fetch(
-        "https://matchr-8e94e-default-rtdb.firebaseio.com/cart.json",
-        {
-          method: "PUT",
-          body: JSON.stringify(cart),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Something went Wrong");
-      }
-      //const data=await response.json();
-      dispatch(
-        uiActions.showNotification({
-          title: "Success!",
-          message: "Cart data sent!",
-          status: "success",
-        })
-      );
-    };
-
     if(isinit===true){
       isinit=false;
       return ;
     }
-    sendCartData().catch((e) => {
-      dispatch(
-        uiActions.showNotification({
-          title: "Error!",
-          message: "Sending cart data failed",
-          status: "error",
-        })
-      );
-    });
+    dispatch(sendCartData(cart));
   }, [cart, dispatch]);
   return (
     <>

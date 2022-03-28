@@ -15,7 +15,10 @@ export const fetchCartData = () => {
     };
 
     try {
-      const cartData = await fetchData();
+      let cartData = await fetchData();
+      if(!cartData||cartData.totalQuantity===0){
+          cartData={items:[],totalQuantity:0};
+      }
       dispatch(cartActions.replaceCart(cartData));
     } catch (e) {
       dispatch(
